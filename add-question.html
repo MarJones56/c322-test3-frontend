@@ -58,13 +58,15 @@
 
     <div id="list" class="cards"></div>
 
+    <script src="configuration.js"></script>
     <script>
-      let host = "http://localhost:8080";
+      let host = getHost();
       let questions = [];
       displayTheQuestions();
 
       async function getAll() {
-        let response = await fetch(host + "/questions");
+        const headers = {'Authorization': `Bearer ${configuration.token()}`}
+        let response = await fetch(host + "/questions", { headers });
         let result = await response.json();
         return result;
       }
@@ -78,11 +80,17 @@
         list.innerHTML = "";
 
         for (let question of questions) {
+
+          const headers = {'Authorization': `Bearer ${configuration.token()}`}
+          let response = await fetch(host + `/questions/${question.id}/image`, { headers });
+
+          console.log(response);
+
           let div = document.createElement("div");
           div.className = "card";
           let innerHtml = `
          
-        <img src="http://localhost:8080/questions/${question.id}/image" alt="question" style="width:100%">
+        <img src=" " alt="question" style="width:100%">
         <div class="container">
           <h4><b>${question.id}</b></h4> 
           <p>${question.description}</p>
